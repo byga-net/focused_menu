@@ -1,6 +1,7 @@
-import 'package:example/ScreenTwo.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
+
+import 'ScreenTwo.dart';
 
 class Example1 extends StatefulWidget {
   @override
@@ -60,6 +61,17 @@ class _Example1State extends State<Example1> {
                           blurBackgroundColor: Colors.black54,
                           bottomOffsetHeight: 100,
                           openWithTap: true,
+                          secondaryMenuBoxDecoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          secondaryMenuItems: [
+                            Container(width: 38, color: Colors.pink),
+                            Container(width: 38, color: Colors.red),
+                            Container(width: 38, color: Colors.amberAccent),
+                            Container(width: 38, color: Colors.lightBlue),
+                            Container(width: 38, color: Colors.blueAccent),
+                          ],
                           menuItems: <FocusedMenuItem>[
                             FocusedMenuItem(
                                 title: Text("Open"),

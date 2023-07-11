@@ -1,7 +1,8 @@
-import 'package:example/example1.dart';
-import 'package:example/example2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'example1.dart';
+import 'example2.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatelessWidget {
   const HomePage({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

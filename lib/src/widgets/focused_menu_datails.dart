@@ -5,7 +5,9 @@ import 'package:focused_menu/src/models/focused_menu_item.dart';
 
 class FocusedMenuDetails extends StatelessWidget {
   final List<FocusedMenuItem> menuItems;
+  final List<Widget> secondaryMenuItems;
   final BoxDecoration? menuBoxDecoration;
+  final BoxDecoration? secondaryMenuBoxDecoration;
   final Offset childOffset;
   final double? itemExtent;
   final Size? childSize;
@@ -20,10 +22,12 @@ class FocusedMenuDetails extends StatelessWidget {
   const FocusedMenuDetails(
       {Key? key,
       required this.menuItems,
+      required this.secondaryMenuItems,
       required this.child,
       required this.childOffset,
       required this.childSize,
       required this.menuBoxDecoration,
+      required this.secondaryMenuBoxDecoration,
       required this.itemExtent,
       required this.animateMenu,
       required this.blurSize,
@@ -39,16 +43,27 @@ class FocusedMenuDetails extends StatelessWidget {
 
     final maxMenuHeight = size.height * 0.45;
     final listHeight = menuItems.length * (itemExtent ?? 50.0);
+    final secondaryMenuHeight = 40.0;
+    final secondaryMenuWidht = 233.0;
 
     final maxMenuWidth = menuWidth ?? (size.width * 0.70);
     final menuHeight = listHeight < maxMenuHeight ? listHeight : maxMenuHeight;
-    final leftOffset = (childOffset.dx + maxMenuWidth) < size.width
+    final leftSideMenu = (childOffset.dx + maxMenuWidth) < size.width;
+    final bottomSideMenu = (childOffset.dy + menuHeight + childSize!.height) <
+        size.height - bottomOffsetHeight!;
+    final leftOffset = leftSideMenu
         ? childOffset.dx
         : (childOffset.dx - maxMenuWidth + childSize!.width);
-    final topOffset = (childOffset.dy + menuHeight + childSize!.height) <
-            size.height - bottomOffsetHeight!
+    final topOffset = bottomSideMenu
         ? childOffset.dy + childSize!.height + menuOffset!
         : childOffset.dy - menuHeight - menuOffset!;
+    final secondaryLeftOffset = leftSideMenu
+        ? leftOffset
+        : childOffset.dx + childSize!.width - secondaryMenuWidht;
+    final secondaryTopOffset = bottomSideMenu
+        ? childOffset.dy - 15 - secondaryMenuHeight
+        : childOffset.dy + childSize!.height + 15;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
@@ -67,6 +82,60 @@ class FocusedMenuDetails extends StatelessWidget {
                         (blurBackgroundColor ?? Colors.black).withOpacity(0.7),
                   ),
                 )),
+            if (secondaryMenuItems.length > 0)
+              Positioned(
+                top: bottomSideMenu
+                    ? secondaryTopOffset + secondaryMenuHeight + 10
+                    : secondaryTopOffset - 15,
+                left: leftSideMenu
+                    ? secondaryLeftOffset + 30
+                    : secondaryLeftOffset + secondaryMenuWidht - 30,
+                child: _Circle(6),
+              ),
+            if (secondaryMenuItems.length > 0)
+              Positioned(
+                top: bottomSideMenu
+                    ? secondaryTopOffset + secondaryMenuHeight - 4
+                    : secondaryTopOffset - 6,
+                left: leftSideMenu
+                    ? secondaryLeftOffset + 23
+                    : secondaryLeftOffset + secondaryMenuWidht - 27,
+                child: _Circle(10),
+              ),
+            if (secondaryMenuItems.length > 0)
+              Positioned(
+                top: secondaryTopOffset,
+                left: secondaryLeftOffset,
+                child: ClipRRect(
+                  borderRadius: secondaryMenuBoxDecoration?.borderRadius ??
+                      BorderRadius.circular(10),
+                  child: Container(
+                    height: secondaryMenuHeight,
+                    width: secondaryMenuWidht,
+                    decoration: secondaryMenuBoxDecoration ??
+                        menuBoxDecoration ??
+                        BoxDecoration(
+                            color: Colors.grey.shade200,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(5.0)),
+                            boxShadow: [
+                              const BoxShadow(
+                                  color: Colors.black38,
+                                  blurRadius: 10,
+                                  spreadRadius: 1)
+                            ]),
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: secondaryMenuItems.length,
+                        physics: NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        itemBuilder: (context, index) {
+                          final item = secondaryMenuItems[index];
+                          return item;
+                        }),
+                  ),
+                ),
+              ),
             Positioned(
               top: topOffset,
               left: leftOffset,
@@ -158,6 +227,23 @@ class FocusedMenuDetails extends StatelessWidget {
                         child: child))),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _Circle extends StatelessWidget {
+  const _Circle(this.diameter, {Key? key}) : super(key: key);
+  final double diameter;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: diameter,
+      height: diameter,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(diameter / 2),
       ),
     );
   }

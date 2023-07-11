@@ -28,8 +28,10 @@ class FocusedMenuHolder extends StatefulWidget {
   final double? menuItemExtent;
   final double? menuWidth;
   final List<FocusedMenuItem> menuItems;
+  final List<Widget>? secondaryMenuItems;
   final bool? animateMenuItems;
   final BoxDecoration? menuBoxDecoration;
+  final BoxDecoration? secondaryMenuBoxDecoration;
   final Function? onPressed;
   final Duration? duration;
   final double? blurSize;
@@ -47,9 +49,11 @@ class FocusedMenuHolder extends StatefulWidget {
     Key? key,
     required this.child,
     required this.menuItems,
+    this.secondaryMenuItems,
     this.onPressed,
     this.duration,
     this.menuBoxDecoration,
+    this.secondaryMenuBoxDecoration,
     this.menuItemExtent,
     this.animateMenuItems,
     this.blurSize,
@@ -122,10 +126,12 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
             child: FocusedMenuDetails(
               itemExtent: widget.menuItemExtent,
               menuBoxDecoration: widget.menuBoxDecoration,
+              secondaryMenuBoxDecoration: widget.secondaryMenuBoxDecoration,
               child: widget.child,
               childOffset: childOffset,
               childSize: childSize,
               menuItems: widget.menuItems,
+              secondaryMenuItems: widget.secondaryMenuItems ?? [],
               blurSize: widget.blurSize,
               menuWidth: widget.menuWidth,
               blurBackgroundColor: widget.blurBackgroundColor,
