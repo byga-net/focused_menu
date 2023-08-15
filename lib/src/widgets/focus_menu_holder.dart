@@ -44,6 +44,8 @@ class FocusedMenuHolder extends StatefulWidget {
   final FocusedMenuHolderController? controller;
   final VoidCallback? onOpened;
   final VoidCallback? onClosed;
+  final VoidCallback? onTapStart;
+  final VoidCallback? onTapEnd;
 
   const FocusedMenuHolder({
     Key? key,
@@ -65,6 +67,8 @@ class FocusedMenuHolder extends StatefulWidget {
     this.controller,
     this.onOpened,
     this.onClosed,
+    this.onTapStart,
+    this.onTapEnd,
   }) : super(key: key);
 
   @override
@@ -100,13 +104,24 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
         onTap: () async {
           widget.onPressed?.call();
           if (widget.openWithTap) {
+            if (widget.onTapEnd != null) widget.onTapEnd!();
             await openMenu(context);
           }
         },
         onLongPress: () async {
+          if (widget.onTapEnd != null) widget.onTapEnd!();
           if (!widget.openWithTap) {
             await openMenu(context);
           }
+        },
+        onTapDown: (_) {
+          if (widget.onTapStart != null) widget.onTapStart!();
+        },
+        onTapUp: (_) {
+          if (widget.onTapEnd != null) widget.onTapEnd!();
+        },
+        onTapCancel: () {
+          if (widget.onTapEnd != null) widget.onTapEnd!();
         },
         child: widget.child);
   }
