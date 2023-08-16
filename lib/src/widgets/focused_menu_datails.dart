@@ -48,7 +48,7 @@ class FocusedMenuDetails extends StatelessWidget {
 
     final maxMenuWidth = menuWidth ?? (size.width * 0.70);
     final menuHeight = listHeight < maxMenuHeight ? listHeight : maxMenuHeight;
-    final leftSideMenu = (childOffset.dx + maxMenuWidth) < size.width;
+    final leftSideMenu = childOffset.dx < 100;
     final bottomSideMenu = (childOffset.dy + menuHeight + childSize!.height) <
         size.height - bottomOffsetHeight!;
     final leftOffset = leftSideMenu
