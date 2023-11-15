@@ -242,7 +242,7 @@ class _Circle extends StatelessWidget {
       width: diameter,
       height: diameter,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).secondaryHeaderColor,
         borderRadius: BorderRadius.circular(diameter / 2),
       ),
     );
